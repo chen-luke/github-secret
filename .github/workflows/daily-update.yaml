@@ -1,0 +1,54 @@
+name: Daily Data Update
+
+on:
+  schedule:
+    # Runs at 20:00 UTC (4:00 PM EDT) every day.
+    # Use a cron calculator to adjust for your timezone.
+    - cron: '0 16 * * *'
+    # Allows to run this workflow manually from the Action tab
+    workflow_dispatch:
+
+jobs:
+  update_file_and_create_pr:
+
+    runs-on: ubuntu-latest
+
+    # These permission are needed or the GITHUB_TOKEN to create a PR
+    permission:
+      contents: write
+      pull-request: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # 1. Checks out the repository under $GITHUB_WORKSPACE, so the job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # 2. Setup Git user for the commit
+      - name: Setup Git
+        run: |
+          git config --global user.name 'github-action[bot]'
+          git config --global user.nemail 'github-action[bot]@users.noreply.github.com'
+      # 3. Create a new branch with current date
+      - name: Create New branch
+      run: |
+        BRANCH_NAME="update-$(date + '%Y-%m-%d')"
+        echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+        git checkout -b $BRANCH_NAME
+      # 4. Add today's date to the markdown file 'README.md'
+      - name: Add date to file
+        run: echo "$(date)" >> README.md
+
+      # 5. Commit and push the changes to the new branch
+      - name: Commit and push
+        run: |
+          git add README.md
+          git commit -m "docs: Add date for $(date + '%Y-%m-%d')"
+          git push origin ${{env.BRANCH_NAME}}
+      # 6. Create a pull request and enable auto-merge
+      - name: Create and Auto-Merge Pull request
+        env:
+          # The GITHUB_TOKEN is a special access token that GitHub automatically creates
+          GITHUB_TOKEN ${{secrets.GITHUB_TOKEN}}
+        run: |
+          gh pr create --title "Automated Daily Update: $(date +'%Y-%m-%d')" --body "This PR was automatically created to add today's date." --base main --head ${{ env.BRANCH_NAME }}
+          gh pr merge --auto --squash ${{ env.BRANCH_NAME }}
