@@ -5,11 +5,11 @@ name: Daily Date Update
 # This workflow now runs on every push to the 'main' branch for testing.
 on:
   schedule:
-    - cron: "19 18 * * *"
+    - cron: "26 18 * * *"
     # You can still run this manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A workflow run is made up of onde or more jobs that can run sequentially or in parallel
 jobs:
   update_file_and_create_pr:
     # The type of runner that the job will run on
