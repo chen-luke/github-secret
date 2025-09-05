@@ -42,7 +42,7 @@ jobs:
 
       # 4. Add today's date to the markdown file
       - name: Add date to file
-        run: echo "Last updated on: $(date)" >> README.md
+        run: echo "Last updated on $(date)" >> README.md
 
       # 5. Commit and push the changes to the new branch
       - name: Commit and Push
@@ -59,4 +59,3 @@ jobs:
         run: |
           gh pr create --title "Automated Daily Update: $(date +'%Y-%m-%d')" --body "This PR was automatically created by a GitHub Action." --base main --head ${{ env.BRANCH_NAME }}
           gh pr merge --auto --squash --delete-branch ${{ env.BRANCH_NAME }}
-
