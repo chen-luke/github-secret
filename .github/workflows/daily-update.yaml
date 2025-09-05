@@ -5,7 +5,7 @@ name: Daily Date Update
 # This workflow now runs on every push to the 'main' branch for testing.
 on:
   schedule:
-    - cron: "26 18 * * *"
+    - cron: "35 18 * * *"
     # You can still run this manually from the Actions tab
   workflow_dispatch:
 
