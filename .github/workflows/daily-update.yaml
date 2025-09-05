@@ -6,7 +6,7 @@ on:
   schedule:
     # Runs at 20:00 UTC (4:00 PM EDT) every day.
     # Use a cron calculator to adjust for your timezone.
-    - cron: "0 20 * * *"
+    - cron: "51 15 * * *"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
