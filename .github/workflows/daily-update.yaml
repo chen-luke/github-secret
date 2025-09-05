@@ -59,3 +59,5 @@ jobs:
         run: |
           gh pr create --title "Automated Daily Update: $(date +'%Y-%m-%d')" --body "This PR was automatically created by a GitHub Action." --base main --head ${{ env.BRANCH_NAME }}
           gh pr merge --auto --squash --delete-branch ${{ env.BRANCH_NAME }}
+
+# test
